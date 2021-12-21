@@ -1,0 +1,4 @@
+/client/node_modules
+*.csv
+*.xls
+/client/src/assets/us-county-boundaries.json

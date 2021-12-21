@@ -1,0 +1,12 @@
+{
+  "venues": [
+      {
+          "description": "This could be the center!",
+          "name": "Nuckolls County",
+          "geometry": [
+            40.17,
+            -98.04
+          ]
+      }
+  ]
+}
