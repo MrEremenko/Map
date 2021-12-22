@@ -48,34 +48,43 @@ public class GenShort {
     //ok, now grab one at a time, and create a Adjacency list for each state
     ArrayList<ArrayList<ArrayList<AdjListNode>>> adjecencyLists = createAdjList(states);
     ArrayList<ArrayList<AdjListNode>> alaska = adjecencyLists.get(0);
+    double[] distance = dijkstra(alaska, alaska.get(1).get(0).getVertex()); //pass in the first vertex...doesn't matter
+    System.out.println("Vertex       Distance from Source");
+    for(int i = 0; i < alaska.size(); i++) {
+      System.out.println(i + "           " + distance[i]);
+    }
     // System.out.println(alaska.size());
-    printList(alaska);
+    // printList(alaska);
   }
 
-  public static int[] dijkstra(ArrayList<ArrayList<AdjListNode>> graph, Node source) {
+  public static double[] dijkstra(ArrayList<ArrayList<AdjListNode>> graph, Node source) {
     int V = graph.size();
-    int[] distance = Integer.MAV_VALUE;
-    distance = 0;
+    double[] distance = new double[V];
+    for(int i = 0; i < V; i++) {
+      distance[i] = Double.MAX_VALUE;
+    }
+    distance[0] = 0;
 
     PriorityQueue<AdjListNode> pq = new PriorityQueue<>(
-      (v1, v2) -> v1.getWeight() - v2.getWeight());
+      (v1, v2) -> (int) (v1.getWeight() - v2.getWeight()));
       pq.add(new AdjListNode(source, 0));
 
       while(pq.size() > 0) {
         AdjListNode current = pq.poll();
+        // System.out.println("Current node: " + current);
 
         //go through each of the neighbors, which in this case is every other point...
-        for(AdjListNode n: graph.get(current.getVertex()).id) {
+        for(AdjListNode n: graph.get(current.getVertex().id)) {
           //if the distance of the current node + the child is less than the child's distance, set it...
           if(distance[current.getVertex().id] + n.getWeight() < distance[n.getVertex().id]) {
-            distance[n.getVertex()] = n.getWeight() + distance[current.getVertex().id];
+            distance[n.getVertex().id] = n.getWeight() + distance[current.getVertex().id];
+          
+            //add this new node to the priority queue only if it is less, so we know it is the shortest at this point!
+            pq.add(new AdjListNode(n.getVertex(), distance[n.getVertex().id]));
           }
-          //add this new node to the priority queue
-          pq.add(new AdjListNode(n.getVertex(), distance[n.getVertex().id]));
         }
       }
-
-
+      return distance;
   }
 
 //get all the adjacency lists for each state!
@@ -152,7 +161,7 @@ public class GenShort {
       
       ArrayList<Node> build = new ArrayList<>();
       String prevState = "";
-      int counter = 1;
+      int counter = 0;
       do {
         String line = scan.nextLine();
         // System.out.println(line);
@@ -170,7 +179,7 @@ public class GenShort {
               states.add(build);
             build = new ArrayList<>();
             prevState = state;
-            counter = 1;
+            counter = 0;
           }
 
           build.add(new Node(lat, lon, state, counter++));
