@@ -5,13 +5,16 @@ import data from '../assets/data';
 import Markers from './VenueMarkers';
 import points from '../assets/points.json';
 import byState from '../assets/orgByState.json';
+import test from '../assets/testIncompleteCounty.json';
 
-
-const MapView = () => {
+//the main component...it takes in an array of state objects containing the state abbr. and yeah 
+const MapView = ({
+  states
+}) => {
   const [currentLocation, setCurrentLocation] = useState([44.81, -121]);
   const [zoom, setZoom] = useState(4);
 
-  const [multiPolyline, setMultiPolyline] = useState(byState); 
+  const [multiPolyline, setMultiPolyline] = useState(test); 
 
   function MyComponent() {
     const map = useMapEvents({

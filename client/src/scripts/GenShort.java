@@ -157,7 +157,7 @@ public class GenShort {
   public static ArrayList<ArrayList<Node>> getPoints() {
     ArrayList<ArrayList<Node>> states = new ArrayList<>();
     try {
-      Scanner scan = new Scanner(new File("./CoordsAndState.json"));
+      Scanner scan = new Scanner(new File("../assets/CoordsAndState.json"));
       
       ArrayList<Node> build = new ArrayList<>();
       String prevState = "";

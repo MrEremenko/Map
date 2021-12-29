@@ -2,3 +2,7 @@
 *.csv
 *.xls
 /client/src/assets/us-county-boundaries.json
+
+!ors
+ors/*
+!ors/docker-compose.yml
