@@ -6,3 +6,5 @@
 !ors
 ors/*
 !ors/docker-compose.yml
+
+/server/node_modules

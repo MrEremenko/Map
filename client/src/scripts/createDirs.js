@@ -34,6 +34,7 @@ for(let i = 0; i < data.length; i++) {
 //loop through the resulting map, create folders and create a json file called counties.json
 //pasting the contents of each state into it's own json file...yeahsssss
 for(let state in build) {
-  fs.writeFileSync("../states/" + state + "/countyLines.json", JSON.stringify(build[state], null, 4));
+  fs.writeFileSync("../states/" + state + "/CountyLines.json", JSON.stringify(build[state], null, 2));
+  fs.writeFileSync("../states/" + state + "/FixedPoints.json", "{}");
+  fs.writeFileSync("../states/" + state + "/Summary.json", "{}");
 }
-
