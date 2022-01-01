@@ -19,5 +19,10 @@ router.post("/update", async (req, res) => {
   return res.status(200).json("Got it boys");
 });
 
+router.get("/get-points/:state", async(req, res) => {
+  console.log(req.params.state);
+  return res.status(200).json({ success: true });
+})
+
 
 module.exports = router

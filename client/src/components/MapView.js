@@ -1,11 +1,10 @@
 import React, { Component, useEffect, useState } from 'react';
 import { MapContainer, Polyline, TileLayer, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import data from '../assets/data';
 import Markers from './VenueMarkers';
-import points from '../assets/points.json';
-import byState from '../assets/orgByState.json';
-import test from '../states/WA/CountyLines.json';
+import countyLines from '../states/ME/CountyBorders.json';
+// import countyLines from '../assets/path.json';
+import countyPoints from '../states/ME/CountyPoints.json';
 import { getPointInfo } from '../helpers/ReverseGeocoding.js'
 import axios from 'axios';
 
@@ -15,17 +14,20 @@ const MapView = ({
 }) => {
   const [currentLocation, setCurrentLocation] = useState([44.81, -121]);
   const [zoom, setZoom] = useState(4);
-  const [multiPolyline, setMultiPolyline] = useState(byState); 
-  const [waPath, setWaPath] = useState(byState); 
+  const [multiPolyline, setMultiPolyline] = useState(countyLines); 
+  const [waPath, setWaPath] = useState([]); 
   const [point, setPoint] = useState({lat: "", lng: ""}); 
   
   const [addingPoints, setAddingPoints] = useState(false); 
+  const [startPoint, setStartPoint] = useState(false); 
+  const [endPoint, setEndPoint] = useState(false); 
 
 
   useEffect(() => {
+    axios.get("http://localhost:5000/api/get-points/WA");
     let newArr = [];
-    for(let i = 0; i < test.length; i++) {
-      let val = test[i]["fields"]["geo_shape"]["coordinates"][0];
+    for(let i = 0; i < countyLines.length; i++) {
+      let val = countyLines[i]["fields"]["geo_shape"]["coordinates"][0];
       let swap = val.map(pair => {
         return [pair[1], pair[0]];
       })
@@ -33,6 +35,7 @@ const MapView = ({
     }
     // console.log(newArr);
     setMultiPolyline(newArr);
+    setWaPath(countyPoints.map(county => [county[1][1], county[1][0]]));
   }, []);
 
   function MyComponent() {
@@ -74,6 +77,8 @@ const MapView = ({
   return (
     <div>
       <button onClick= {e => setAddingPoints(!addingPoints)}>{addingPoints ? "Stop Adding" : "Add Fixed Points"}</button>
+      <button onClick= {e => setStartPoint(!startPoint)}>{startPoint ? "Stop setting Start Point" : "Add start Point"}</button>
+      <button onClick= {e => setEndPoint(!endPoint)}>{endPoint ? "Stop setting End Point" : "Add end Point"}</button>
       <div>Chosen point (long, lat): {point["lng"]}, {point["lat"]}</div>
       <MapContainer center={currentLocation} zoom={zoom} >
         <TileLayer
@@ -84,7 +89,7 @@ const MapView = ({
         <Polyline pathOptions={{ color: 'green' }} positions={multiPolyline} />
         <Polyline pathOptions={{ color: 'red' }} positions={waPath} />
         <MyComponent />
-        {/* <Markers venues={data.venues}/> */}
+        <Markers counties={countyPoints}/>
       </MapContainer>
     </div>
   );

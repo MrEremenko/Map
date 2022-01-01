@@ -1,14 +1,17 @@
 import React, { Fragment } from 'react'
 import {Marker} from 'react-leaflet';
-import {VenueLocationIcon} from './VenueLocationIcon';
-import MarkerPopup from './MarkerPopup';
+import { Icon } from 'leaflet';
+import icon from "../assets/dot.png";
 
-const VenueMarkers = (props) => {
-  const { venues } = props;
+import {Popup} from 'react-leaflet';
 
-  const markers = venues.map((venue, index) => (
-    <Marker key={index} position={venue.geometry} icon={VenueLocationIcon} >
-      <MarkerPopup data={venue}/>
+const VenueMarkers = ({counties}) => {
+
+  const markers = counties.map((county, index) => (
+    <Marker key={index} position={[county[1][1], county[1][0]]} icon={new Icon({iconUrl: icon, iconSize: [10, 10] })}  >
+      <Popup>
+        <div className='poup-text'>{county[0]}</div>
+      </Popup>
     </Marker>
   ));
 
